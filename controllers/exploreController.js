@@ -1,5 +1,6 @@
 const moment = require('moment');
 const Post = require('../models/Post');
+const Profile = require('../models/Profile');
 const Flash = require('../utils/Flash');
 
 function genDate(days) {
@@ -45,18 +46,40 @@ function generateFilterObject(filter) {
 
 exports.explorerGetController = async (req, res, next) => {
     const filter = req.query.filter || 'latest';
+    const currentPage = parseInt(req.query.page) || 1;
+    const itemPerPage = 1;
 
     const { order, filterObj } = generateFilterObject(filter.toLowerCase());
 
     try {
         const posts = await Post.find(filterObj)
             .populate('author', 'username')
-            .sort(order === 1 ? '-createdAt' : 'createdAt');
+            .sort(order === 1 ? '-createdAt' : 'createdAt')
+            .skip(itemPerPage * currentPage - itemPerPage)
+            .limit(itemPerPage);
+
+        const totalPost = await Post.countDocuments();
+        const totalPage = totalPost / itemPerPage;
+
+        let bookmarks = [];
+
+        if (req.user) {
+            const profile = await Profile.findOne({ user: req.user._id });
+
+            if (profile) {
+                bookmarks = profile.bookmarks;
+            }
+        }
+
         res.render('pages/explorer/explorer', {
             title: 'Explore All Posts',
             filter,
             flashMessage: Flash.getMessage(req),
             posts,
+            itemPerPage,
+            currentPage,
+            totalPage,
+            bookmarks,
         });
     } catch (e) {
         next(e);
