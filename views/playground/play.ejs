@@ -1,0 +1,33 @@
+<%- include('../assets/head.ejs') %>
+
+
+<div class="container" style="height: 520px;">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="jumbotron mt-5 pt-4 pb-4">
+                <h4 class="text-center pb-3 text-uppercase text-info">Signup for your account</h4>
+                <form action="/playground/play" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="username" class="small mb-0">Enter your user name</label>
+                        <input class="form-control" type="text" name="username" id="username">
+                        <small id="helpId" class="text-muted"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="file" class="small mb-0">Choose Your File</label>
+                        <input class="form-control" type="file" name="my-file" id="file">
+                        <small id="helpId" class="text-muted"></small>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Signup">
+                </form>
+                <a href="/auth/login" class="small">Do you have an account ? login here..</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<%- include('../assets/footer.ejs') %>
+</body>
+
+</html>

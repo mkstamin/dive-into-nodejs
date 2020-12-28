@@ -1,0 +1,44 @@
+<%- include('../../../assets/head.ejs') %>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-3">
+            <%- include('../../../assets/sidebar.ejs') %>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card card-body mb-2">
+                <h5>List Of My Posts</h5>
+                <div class="row">
+                    <% if (posts.length===0) { %>
+                     <div class="text-center text-muted">
+                         <p>There is no posts avaiable right now</p>
+                         <a href="posts/create" class="btn btn-primary btn-sm">Create Post Now</a>
+                     </div>
+                    <% } else { %>
+                     <% for( let post of posts.reverse() ) { %>
+                     <div class="card col-3 m-2">
+                         <% if (post.thumbnail) { %>
+                          <img src="<%= post.thumbnail %> " alt="<%= post.title %> " class="card-img-top mt-3">
+                         <% } %>
+                         <div class="card-body">
+                             <a href="/posts/edit/<%= post._id %> " style="color: #222222;">
+                             <h5><%= post.title %> </h5>
+                             </a>
+                         </div>
+                     </div>
+                     <% } %>
+                    <% } %>  
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('../../../assets/footer.ejs') %>
+</body>
+
+</html>

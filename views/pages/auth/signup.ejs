@@ -1,0 +1,56 @@
+<%- include('../../assets/head.ejs') %>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="jumbotron mt-5 pt-4 pb-4">
+                <h4 class="text-center pb-3 text-uppercase text-info">Signup for your account</h4>
+                <form action="/auth/signup" method="post">
+                    <div class="form-group">
+                        <label for="username" class="small mb-0">Enter your user name</label>
+                        <input class="form-control <%= error.username ? 'is-invalid' : '' %>" type="text"
+                            name="username" id="username" value="<%= value.username?value.username:'' %> ">
+                        <small id="helpId" class="invalid-feedback">
+                            <%= error.username && error.username %>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="small mb-0">Enter your eamil address</label>
+                        <input class="form-control <%= error.email ? 'is-invalid' : '' %>" type="email" name="email"
+                            id="email" value="<%= value.email?value.email:'' %> ">
+                        <small id="helpId" class="invalid-feedback">
+                            <%= error.email && error.email %>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="small mb-0">Enter your password</label>
+                        <input class="form-control <%= error.password ? 'is-invalid' : '' %> " type="password"
+                            name="password" id="password" value="<%= value.password?value.password:''%> ">
+                        <small id="helpId" class="invalid-feedback">
+                            <%= error.password && error.password %>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="small mb-0">Confirm your pssword</label>
+                        <input class="form-control <%= error.confirmPassword ? 'is-invalid' : '' %>" type="password"
+                            name="confirmPassword" id="password">
+                        <small id="helpId" class="invalid-feedback">
+                            <%= error.confirmPassword && error.confirmPassword %>
+                        </small>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Signup">
+                </form>
+                <a href="/auth/login" class="small">Do you have an account ? login here..</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<%- include('../../assets/footer.ejs') %>
+</body>
+
+</html>
