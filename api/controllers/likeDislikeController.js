@@ -14,7 +14,7 @@ exports.likesGetController = async (req, res, next) => {
     const userId = req.user._id;
 
     try {
-        const post = Post.findById(postId);
+        const post = await Post.findById(postId);
 
         if (post.dislikes.includes(userId)) {
             await Post.findByIdAndUpdate({ _id: postId }, { $pull: { dislikes: userId } });
@@ -56,13 +56,13 @@ exports.disLikesGetController = async (req, res, next) => {
     const userId = req.user._id;
 
     try {
-        const post = Post.findById(postId);
+        const post = await Post.findById(postId);
 
         if (post.likes.includes(userId)) {
             await Post.findByIdAndUpdate({ _id: postId }, { $pull: { likes: userId } });
         }
 
-        if (post.disliked.includes(userId)) {
+        if (post.dislikes.includes(userId)) {
             await Post.findByIdAndUpdate({ _id: postId }, { $pull: { dislikes: userId } });
             disliked = false;
         } else {

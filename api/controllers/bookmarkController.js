@@ -13,13 +13,13 @@ exports.bookmarksController = async (req, res, next) => {
     let bookmark = null;
 
     try {
-        const profile = await Profile.findOne(userId);
+        const profile = await Profile.findOne({ user: userId });
 
         if (profile.bookmarks.includes(postId)) {
-            await Profile.findByIdAndUpdate({ user: userId }, { $pull: { bookmarks: postId } });
+            await Profile.findOneAndUpdate({ user: userId }, { $pull: { bookmarks: postId } });
             bookmark = false;
         } else {
-            await Profile.findByIdAndUpdate({ user: userId }, { $push: { bookmarks: postId } });
+            await Profile.findOneAndUpdate({ user: userId }, { $push: { bookmarks: postId } });
             bookmark = true;
         }
         res.status(200).json({
