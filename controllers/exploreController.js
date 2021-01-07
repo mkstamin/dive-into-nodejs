@@ -47,7 +47,7 @@ function generateFilterObject(filter) {
 exports.explorerGetController = async (req, res, next) => {
     const filter = req.query.filter || 'latest';
     const currentPage = parseInt(req.query.page) || 1;
-    const itemPerPage = 1;
+    const itemPerPage = 10;
 
     const { order, filterObj } = generateFilterObject(filter.toLowerCase());
 
@@ -79,6 +79,52 @@ exports.explorerGetController = async (req, res, next) => {
             itemPerPage,
             currentPage,
             totalPage,
+            bookmarks,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+exports.singlePostGetController = async (req, res, next) => {
+    const { postId } = req.params;
+    try {
+        const post = await Post.findById(postId)
+            .populate('author', 'username profilePics')
+            .populate({
+                path: 'comments',
+                pupulate: {
+                    path: 'user',
+                    select: 'username profilePics',
+                },
+            })
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'replies.user',
+                    select: 'username profilePics',
+                },
+            });
+
+        if (!post) {
+            const error = new Error('404 Page Not Found');
+            error.status = 404;
+            throw error;
+        }
+
+        let bookmarks = [];
+        if (req.user) {
+            const profile = await Profile.findOne({ user: req.user._id });
+
+            if (profile) {
+                bookmarks = profile.bookmarks;
+            }
+        }
+
+        res.render('pages/explorer/singlePage', {
+            title: post.title,
+            flashMessage: Flash.getMessage(req),
+            post,
             bookmarks,
         });
     } catch (e) {
